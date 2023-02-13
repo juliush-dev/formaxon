@@ -5,6 +5,7 @@ use App\Http\Controllers\FormController;
 use App\Http\Controllers\FormFieldController;
 use App\Http\Controllers\FormFieldDataController;
 use App\Http\Controllers\FormGroupController;
+use App\Http\Controllers\FormGroupFormController;
 use App\Http\Controllers\ProfileController;
 use App\Models\FormField;
 use Illuminate\Http\Request;
@@ -45,9 +46,10 @@ Route::middleware('splade')->group(function () {
             Route::delete('delete', [ProfileController::class, 'destroy'])->name('destroy');
         });
         Route::resource('events', EventController::class);
+        Route::resource('groups', FormGroupController::class);
+        Route::resource('groups.forms', FormGroupFormController::class)->except(['index']);
         Route::resource('forms', FormController::class);
         Route::resource('forms.fields', FormFieldController::class);
-        Route::resource('groups', FormGroupController::class);
         Route::resource('forms.fields.data', FormFieldDataController::class);
         Route::get('/fields/{field}/data', function (FormField $field) {
             Gate::allows('if_admin');

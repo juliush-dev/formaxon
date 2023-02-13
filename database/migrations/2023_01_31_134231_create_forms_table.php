@@ -13,14 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('form_groups', function (Blueprint $table) {
+        Schema::create('forms', function (Blueprint $table) {
             $table->id();
             $table->string('title')->unique();
-            $table->timestamps();
-        });
-        Schema::create('event_form_group', function (Blueprint $table) {
-            $table->foreignId('event_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('form_group_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -32,7 +27,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('event_form_group');
-        Schema::dropIfExists('form_groups');
+        Schema::dropIfExists('form_group_form');
+        Schema::dropIfExists('forms');
     }
 };

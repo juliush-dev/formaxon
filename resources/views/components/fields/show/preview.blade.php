@@ -21,7 +21,7 @@
         @elseif($field->type == \App\Enums\FormFieldType::SELECT->value)
             <x-splade-select :name="$field_code_name" :label="$field->label" choices />
         @endif
-        <footer class="flex space-x-4 mt-2 justify-end">
+        <footer class="flex space-x-4 mt-2">
             <Link modal href="{{ route('forms.fields.edit', ['form' => $form, 'field' => $field]) }}">
             Edit field
             </Link>

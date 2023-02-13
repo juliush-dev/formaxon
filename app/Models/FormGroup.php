@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,7 +10,7 @@ class FormGroup extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title'
+        'name'
     ];
     public function events()
     {
@@ -18,7 +19,7 @@ class FormGroup extends Model
 
     public function forms()
     {
-        return $this->hasMany(Form::class);
+        return $this->belongsToMany(Form::class)->using(FormGroupForm::class);
     }
 
     public function Subscriptions()

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ValidateFormFieldStoreRequest
 {
-    const VALUE_OPTIONS_PATTERN_RULE = "regex:/^(\b\w+\b)(,\s*\b\w+\b)*$/";
+    const VALUE_OPTIONS_PATTERN_RULE = "regex:/^(\b\w+\b)(\s+\b\w+\b)*(,\s*\b\w+\b(\s+\b\w+\b)*)*$/";
     /**
      * Handle an incoming request.
      *
@@ -99,6 +99,10 @@ class ValidateFormFieldStoreRequest
             $request->all(),
             [
                 ...$commonRules,
+                'value_options' => [
+                    'required',
+                    self::VALUE_OPTIONS_PATTERN_RULE
+                ],
                 'default_value' => [
                     'nullable',
                     Rule::in(array_map(fn ($elt) => trim($elt), explode(',', $request->string('value_options'))))
@@ -130,6 +134,10 @@ class ValidateFormFieldStoreRequest
     {
         $validator = Validator::make($request->all(), [
             ...$commonRules,
+            'value_options' => [
+                'required',
+                self::VALUE_OPTIONS_PATTERN_RULE
+            ],
             'value_is_reference' => 'nullable|boolean',
             'value_is_a_sets' => 'nullable|boolean',
             /* 'referenced_field_id' => 'nullable|required_without:value_options|exists:form_fields,id',

@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Enums\FormFieldType;
 use App\Models\FormField;
+use App\Models\FormFieldData;
+use App\Models\FormGroup;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -39,6 +41,8 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
         Route::model('field', FormField::class);
+        Route::model('group', FormGroup::class);
+        Route::model('data', FormFieldData::class);
     }
 
     /**

@@ -18,9 +18,7 @@ class FormController extends Controller
      */
     public function index()
     {
-        return view('forms.index', [
-            'forms' => Forms::class,
-        ]);
+        return view('forms.index');
     }
 
     /**
@@ -31,7 +29,7 @@ class FormController extends Controller
     public function create()
     {
         Gate::authorize('if_admin');
-        return view('forms.create');
+        return view('components.forms.create');
     }
 
     /**
