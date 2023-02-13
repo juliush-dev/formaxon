@@ -17,12 +17,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('form_id')->constrained()->cascadeOnDelete();
             $table->string('type');
+            /* $table->string('order_in_form'); */
             $table->string('label');
-            $table->string('code_name');
             $table->boolean('value_required')->default(false);
             $table->boolean('field_visible_by_target')->nullable();
             $table->boolean('value_editable_by_target')->nullable();
-            $table->string('checked')->nullable();
             $table->boolean('value_is_unique')->nullable();
             $table->boolean('value_is_reference')->nullable();
             $table->boolean('value_is_a_set')->nullable();

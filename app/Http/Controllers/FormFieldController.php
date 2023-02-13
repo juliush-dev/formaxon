@@ -14,7 +14,10 @@ class FormFieldController extends Controller
     protected $form;
     public function __construct()
     {
-        $this->middleware("validate-form-field-store-request")->only('store');
+        $this->middleware("validate-form-field-store-request")->only([
+            'store',
+            'update'
+        ]);
     }
     /**
      * Display a listing of the resource.
@@ -74,7 +77,7 @@ class FormFieldController extends Controller
     {
         return view('components.fields.edit.index', [
             'form' => $form,
-            'field' => $field,
+            'field' => $field
         ]);
     }
 
@@ -89,8 +92,26 @@ class FormFieldController extends Controller
     {
         Gate::authorize('if_admin');
         $request->merge(['form_id' => $form->id]);
-        // FormField::upda($request->all());
-        Toast::title('New field added')->autoDismiss(2);
+        $field->form_id = $request->input('form_id');
+        $field->type = $request->input('type');
+        $field->label = $request->input('label');
+        $field->value_required = $request->input('value_required');
+        $field->field_visible_by_target = $request->input('field_visible_by_target');
+        $field->value_editable_by_target = $request->input('value_editable_by_target');
+        $field->value_is_unique = $request->input('value_is_unique');
+        $field->value_is_reference = $request->input('value_is_reference');
+        $field->value_is_a_set = $request->input('value_is_a_set');
+        $field->referenced_field_id = $request->input('referenced_field_id');
+        $field->default_value_ref_id = $request->input('default_value_ref_id');
+        $field->value_options = $request->input('value_options');
+        $field->default_value = $request->input('default_value');
+        $field->default_value_set = $request->input('default_value_set');
+        $field->accepted_file_types = $request->input('accepted_file_types');
+        $field->value_min_length = $request->input('value_min_length');
+        $field->value_max_length = $request->input('value_max_length');
+
+        $field->save();
+        Toast::title('Field updated')->autoDismiss(2);
         return redirect()->route('forms.index');
     }
 
@@ -100,8 +121,10 @@ class FormFieldController extends Controller
      * @param  \App\Models\FormField  $formField
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FormField $formField)
+    public function destroy(Request $request)
     {
-        //
+        FormField::destroy($request->field->id);
+        Toast::title('Field deleted')->autoDismiss(2);
+        return redirect()->route('forms.index');
     }
 }

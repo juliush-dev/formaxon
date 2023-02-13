@@ -4,12 +4,10 @@
             'form_id' => null,
             'type' => $fieldType,
             'label' => null,
-            'code_name' => null,
             'value_required' => true,
             'field_visible_by_target' => true,
             'value_editable_by_target' => true,
-            'checked' => null,
-            'value_is_unique' => null,
+            'value_is_unique' => true,
             'value_is_reference' => null,
             'value_is_a_set' => null,
             'referenced_field_id' => null,
@@ -22,12 +20,6 @@
             'value_max_length' => null,
         ]" class="space-y-4" :action="route('forms.fields.store', $form)" method="POST">
             @php
-                $referencableFormFields = \App\Models\FormField::where('form_id', '!=', $form->id)
-                    ->where('type', \App\Enums\FormFieldType::TEXT->value)
-                    ->orWhere('type', \App\Enums\FormFieldType::EMAIL->value)
-                    ->join('forms', 'forms.id', '=', 'form_fields.form_id')
-                    ->select('forms.title', 'form_fields.id', 'form_fields.label')
-                    ->get();
                 $componentName = "components.fields.create.{$fieldType}-field";
             @endphp
             @include($componentName)

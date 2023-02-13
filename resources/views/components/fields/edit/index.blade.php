@@ -4,11 +4,9 @@
             'form_id' => $field->form_id,
             'type' => $field->type,
             'label' => $field->label,
-            'code_name' => $field->code_name,
             'value_required' => $field->value_required,
             'field_visible_by_target' => $field->field_visible_by_target,
             'value_editable_by_target' => $field->value_editable_by_target,
-            'checked' => $field->checked,
             'value_is_unique' => $field->value_is_unique,
             'value_is_reference' => $field->value_is_reference,
             'value_is_a_set' => $field->value_is_a_set,
@@ -22,14 +20,9 @@
             'value_max_length' => $field->value_max_length,
         ]" class="space-y-4" :action="route('forms.fields.update', ['form' => $form, 'field' => $field])" method="PUT">
             @php
-                $referencableFormFields = \App\Models\FormField::where('form_id', '!=', $form->id)
-                    ->where('type', \App\Enums\FormFieldType::TEXT->value)
-                    ->orWhere('type', \App\Enums\FormFieldType::EMAIL->value)
-                    ->join('forms', 'forms.id', '=', 'form_fields.form_id')
-                    ->select('forms.title', 'form_fields.id', 'form_fields.label')
-                    ->get();
                 $componentName = "components.fields.edit.{$field->type}-field";
             @endphp
+            <h2 class="text-xl mb-4">Configuring {{ $field->type }} field...</h2>
             @include($componentName)
             @error('code_name')
                 <div class="text-teal-300">{{ $message }}</div>

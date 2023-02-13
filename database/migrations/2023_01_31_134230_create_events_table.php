@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name', 255)->unique();
             $table->enum('target', ['visitor', 'company']);
             $table->boolean('field_visible_by_target')->default(false);
-            $table->longText('description')->unique()->nullable();
+            $table->text('description')->nullable();
             $table->string('location', 255);
             $table->string('thumbnail')->nullable();
             $table->date('at');
