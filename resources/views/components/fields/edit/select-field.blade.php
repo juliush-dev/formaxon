@@ -5,7 +5,6 @@
         ->join('forms', 'forms.id', '=', 'form_fields.form_id')
         ->select('forms.title', 'form_fields.id', 'form_fields.label')
         ->get();
-    $componentName = "components.fields.create.{$fieldType}-field";
 @endphp
 <x-splade-input name="type" type="text" label="Field's type" readonly />
 <x-splade-input name="label" type="text" label="What information is this field asking?" />
@@ -13,8 +12,8 @@
 <x-splade-checkbox name="field_visible_by_target" value="1" label="Field Visible by target" />
 <x-splade-checkbox v-if="form.field_visible_by_target" value="1" name="value_editable_by_target"
     label="Value provided by target" />
-<x-splade-checkbox name="value_is_unique" value="1" label="Value must be unique" />
-<x-splade-checkbox name="value_is_a_set" value="1" label="Value is a set" />
+<x-splade-checkbox name="value_is_a_set" label="Multiple choices possible"
+    @checked="form.value_is_unique = !form.value_is_a_set" />
 {{-- reference configuration --}}
 @if (count($referencableFormFields) > 0)
     <x-splade-checkbox name="value_is_reference" value="1" label="Value is reference to the field of another form" />
