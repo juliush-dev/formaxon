@@ -57,6 +57,12 @@ Route::middleware('splade')->group(function () {
                 $field->formFieldData()->get()->toArray()
             );
         });
+        Route::get('/forms/{form}/field/get', function (FormField $field) {
+            Gate::allows('if_admin');
+            return response()->json(
+                $field->formFieldData()->get()->toArray()
+            );
+        })->name('get.form.fields');
     });
 
     require __DIR__ . '/auth.php';

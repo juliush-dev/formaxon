@@ -31,9 +31,7 @@
             <x-splade-form action="{{ route('groups.forms.store', $group) }}" method="POST" submit-on-change="forms"
                 class="shadow-sm p-4 bg-slate-300 rounded-md">
                 <x-splade-checkboxes name="forms" option-label="title" option-value="id"
-                    label="Forms not yet in this group" :options="$formsNotYetInGroup
-                        ->mapWithKeys(fn($item, $key) => [$item['id'] => $item['title']])
-                        ->all()" />
+                    label="Forms not yet in this group" :options="$formsNotYetInGroup->mapWithKeys(fn($item, $key) => [$item['id'] => $item['title']])" />
                 @error('forms', $errorsBagName)
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
