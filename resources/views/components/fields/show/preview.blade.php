@@ -3,7 +3,7 @@
     @php
         $field_code_name = "{$field->type}{$field->id}";
     @endphp
-    <div>
+    <div class="group">
         @if ($field->type == \App\Enums\FormFieldType::TEXT->value)
             <x-splade-input :name="$field_code_name" type="text" :value="$field->default_value" :label="$field->label" readonly />
         @elseif ($field->type == \App\Enums\FormFieldType::NUMBER->value)
@@ -14,14 +14,14 @@
             <x-splade-input :name="$field_code_name" type="password" :value="$field->default_value" :label="$field->label" readonly />
         @elseif($field->type == \App\Enums\FormFieldType::CHECKBOX->value)
             @php $options = array_map(fn($option) => trim($option), explode(',', $field->value_options));@endphp
-            <x-splade-checkboxes :name="$field_code_name" :label="$field->label" :options="$options" />
+            <x-splade-checkboxes :name="$field_code_name" :label="$field->label" :options="$options" inline />
         @elseif($field->type == \App\Enums\FormFieldType::RADIO->value)
             @php $options = array_map(fn($option) => trim($option), explode(',', $field->value_options));@endphp
-            <x-splade-radios :name="$field_code_name" :label="$field->label" :options="$options" />
+            <x-splade-radios :name="$field_code_name" :label="$field->label" :options="$options" inline />
         @elseif($field->type == \App\Enums\FormFieldType::SELECT->value)
             <x-splade-select :name="$field_code_name" :label="$field->label" choices />
         @endif
-        <footer class="flex space-x-4 mt-2">
+        <footer class="hidden space-x-4 mt-2 group-hover:flex">
             <Link modal href="{{ route('forms.fields.edit', ['form' => $form, 'field' => $field]) }}">
             Edit field
             </Link>
