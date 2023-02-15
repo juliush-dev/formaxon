@@ -13,10 +13,13 @@
     @checked="form.value_is_unique = !form.value_is_a_set" />
 {{-- reference configuration --}}
 @if (count($referencableForms) > 0)
-    <x-splade-checkbox name="value_is_reference" label="Value is reference to the field of another form" />
-    <x-splade-select v-if="form.value_is_reference && form.$put('referenced_form_id', 'null')" name="referenced_form_id"
-        label="Select reference field" option-value="id" option-label="title" :options="$referencableForms->mapWithKeys(fn($item, $key) => [$item['id'] => $item['title']])" choices>
-        <x-splade-select name="referenced_field_id" remote-url="`/api/regions/${form.country}`" />
+    <x-splade-data :default="['referenced_form_id' => null]">
+        <x-splade-checkbox name="value_is_reference" label="Value is reference to the field of another form" />
+        <x-splade-select v-if="form.value_is_reference" v-model="data.referenced_form_id" label="Select reference field"
+            :options="$referencableForms->mapWithKeys(fn($item, $key) => [$item['id'] => $item['title']])" choices />
+        <x-splade-select v-if="form.value_is_reference && data.referenced_form_id" name="referenced_field_id"
+            remote-url="`/forms/${data.referenced_form_id}/fields`" />
+    </x-splade-data>
 @endif
 <x-splade-input v-if="!form.value_is_reference" name="value_options" label="Value Options (comma separated)"
     placeholder="Car,Vehicle,Bicycle,..." />

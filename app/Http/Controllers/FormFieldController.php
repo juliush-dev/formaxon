@@ -24,8 +24,12 @@ class FormFieldController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Form $form)
     {
+        Gate::allows('if_admin');
+        return response()->json(
+            FormField::where('form_id', $form->id)->get()->mapWithKeys(fn ($field) => [$field['id'] => $field['label']])->toArray()
+        );
     }
 
     /**
