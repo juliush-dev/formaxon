@@ -1,9 +1,9 @@
 @props(['form', 'field'])
-<x-splade-form class="flex flex-col space-y-2" @submit.prevent="">
+<x-splade-form class="flex flex-col space-y-5" @submit.prevent="">
     @php
         $field_code_name = "{$field->type}{$field->id}";
     @endphp
-    <div class="p-4 bg-slate-100">
+    <div>
         @if ($field->type == \App\Enums\FormFieldType::TEXT->value)
             <x-splade-input :name="$field_code_name" type="text" :value="$field->default_value" :label="$field->label" readonly />
         @elseif ($field->type == \App\Enums\FormFieldType::NUMBER->value)
