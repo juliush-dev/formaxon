@@ -135,25 +135,29 @@ class ValidateFormFieldStoreRequest
         $validator = Validator::make($request->all(), [
             ...$commonRules,
             'value_options' => [
-                'required',
+                'nullable',
+                'required_if:value_is_reference,null',
                 self::VALUE_OPTIONS_PATTERN_RULE
             ],
-            'value_is_reference' => 'nullable|boolean',
-            'value_is_a_sets' => 'nullable|boolean',
-            /* 'referenced_field_id' => 'nullable|required_without:value_options|exists:form_fields,id',
-            'default_value_ref_id' => 'nullable|required_without:value_is_a_sets|exists:form_field_data,form_field_id',
-            'default_value_ref_ids' => 'nullable|required_with:value_is_a_sets|array',
-            'default_value_ref_ids.*' => 'nullable|exists:form_field_data,form_field_id',
-            'value_options' => 'required_without:value_is_reference',
-            'default_value' => [
+            'value_is_reference' => [
                 'nullable',
-                Rule::in(explode(',', $request->string('value_options')))
+                'required_if:value_options,null',
+            ],
+            'value_is_a_sets' => 'nullable|boolean',
+            'referenced_field_id' => [
+                'nullable',
+                'required_with:value_is_reference,1',
+                'exists:form_fields,id'
             ],
             'default_value_set' => [
                 'nullable',
-                'required_with:value_is_a_sets',
-                self::VALUE_OPTIONS_PATTERN_RULE
-            ], */
+                self::VALUE_OPTIONS_PATTERN_RULE,
+                Rule::in(array_map(
+                    fn ($option) => trim($option),
+                    explode(',', $request->value_options)
+                ))
+            ]
+
         ]);
         return $validator;
     }

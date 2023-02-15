@@ -15,10 +15,10 @@
 @if (count($referencableForms) > 0)
     <x-splade-data :default="['referenced_form_id' => null]">
         <x-splade-checkbox name="value_is_reference" label="Value is reference to the field of another form" />
-        <x-splade-select v-if="form.value_is_reference" v-model="data.referenced_form_id" label="Select reference field"
+        <x-splade-select v-if="form.value_is_reference" v-model="data.referenced_form_id" label="Select a form"
             :options="$referencableForms->mapWithKeys(fn($item, $key) => [$item['id'] => $item['title']])" choices />
         <x-splade-select v-if="form.value_is_reference && data.referenced_form_id" name="referenced_field_id"
-            remote-url="`/forms/${data.referenced_form_id}/fields`" />
+            remote-url="`/forms/${data.referenced_form_id}/fields`" label="Select a field" />
     </x-splade-data>
 @endif
 <x-splade-input v-if="!form.value_is_reference" name="value_options" label="Value Options (comma separated)"
