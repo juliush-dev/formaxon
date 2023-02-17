@@ -1,54 +1,57 @@
 @props(['group'])
-@php
-    $errorsBagName = \App\Http\Controllers\FormGroupFormController::getRequestErrorsBagName($group);
-    $formsNotYetInGroup = \App\Models\Form::get()->diff($group->forms);
-@endphp
-<div class="flex flex-col space-y-4 p-4 border shadow-sm bg-slate-200 rounded-md">
-    <header>
-        <h2 class="text-xl">{{ ucfirst(__($group->name)) }}</h2>
+<div class="flex flex-col space-y-4 shadow-md bg-white rounded-md">
+    <header class="relative flex space-x-5 justify-between rounded-md shadow-sm bg-white p-5">
+        <h4 class="text-md font-semibold">{{ ucfirst(__($group->name)) }}</h4>
+        <div class="flex space-x-5 items-baseline pt-1">
+            <Link modal href="{{ route('groups.edit', $group) }}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+            </svg>
+            </Link>
+            <Link method='DELETE' confirm href="{{ route('groups.destroy', $group) }}" class="text-red-500">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            </Link>
+        </div>
     </header>
-    <main class="flex flex-col space-y-4">
+    <main class="flex flex-col space-y-4 px-3">
         @forelse ($group->forms as $form)
-            <div class="bg-slate-100 p-4">
+            <div class="flex justify-between p-2 rounded">
                 <span>{{ $form->title }}</span>
-                <div class="flex space-x-4 justify-end">
-                    <Link modal href="{{ route('forms.show', $form) }}">
-                    Edit this form
+                <div class="flex space-x-5 items-baseline ">
+                    <Link modal href="{{ route('forms.edit', $form) }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                    </svg>
                     </Link>
                     <Link method='DELETE' confirm
                         href="{{ route('groups.forms.destroy', ['group' => $group, 'form' => $form]) }}"
                         class="text-red-500">
-                    Delete Form
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                     </Link>
                 </div>
             </div>
         @empty
-            <x-hint text="No form yet. Start adding new ones!" />
+            <x-hint class="px-5" text="Select a form bellow." />
         @endforelse
     </main>
-    <footer class="flex flex-col space-y-4 border-t border-slate-300 pt-4">
+    <footer class="flex flex-col space-y-4 px-5 pb-5">
+        @php
+            $formsNotYetInGroup = \App\Models\Form::get()->diff($group->forms);
+        @endphp
         @if ($formsNotYetInGroup->count() > 0)
-            <x-splade-form action="{{ route('groups.forms.store', $group) }}" method="POST" submit-on-change="forms"
-                class="shadow-sm p-4 bg-slate-300 rounded-md">
-                <x-splade-checkboxes name="forms" option-label="title" option-value="id"
-                    label="Forms not yet in this group" :options="$formsNotYetInGroup->mapWithKeys(fn($item, $key) => [$item['id'] => $item['title']])" />
-                @error('forms', $errorsBagName)
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+            <x-splade-form action="{{ route('groups.forms.store', $group) }}" method="POST" submit-on-change="forms">
+                <x-splade-checkboxes name="forms" label="Forms not yet in this group" :options="$formsNotYetInGroup->mapWithKeys(fn($item, $key) => [$item['id'] => $item['title']])" />
             </x-splade-form>
-        @else
-            <x-hint text="This group contains all available forms" />
         @endif
-        <div class="flex space-x-4">
-            <Link modal href="{{ route('groups.edit', $group) }}">
-            Edit group
-            </Link>
-            <Link method='DELETE'
-                confirm="{{ __('Deleting this group will delete everything related to it. Continue?') }}"
-                confirm-button="{{ __('Yes') }}" cancel-button="{{ __('No') }}"
-                href="{{ route('groups.destroy', $group) }}" class="text-red-500">
-            Delete group
-            </Link>
-        </div>
     </footer>
 </div>
