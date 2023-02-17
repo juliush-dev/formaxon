@@ -116,7 +116,7 @@ class FormFieldController extends Controller
 
         $field->save();
         Toast::title('Field updated')->autoDismiss(2);
-        return redirect()->route('forms.index');
+        return back();
     }
 
     /**
@@ -129,6 +129,6 @@ class FormFieldController extends Controller
     {
         FormField::destroy($request->field->id);
         Toast::title('Field deleted')->autoDismiss(2);
-        return redirect()->route('forms.index');
+        return back();
     }
 }

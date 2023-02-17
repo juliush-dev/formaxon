@@ -68,7 +68,8 @@ class FormGroupController extends Controller
      */
     public function edit(FormGroup $group)
     {
-        //
+        Gate::authorize('if_admin');
+        return view('components.groups.edit', ['group' => $group]);
     }
 
     /**
@@ -82,12 +83,12 @@ class FormGroupController extends Controller
     {
         Gate::authorize('if_admin');
         $request->validate([
-            'name' => 'required|string|unique:forms|max:255|min:4'
+            'name' => 'required|string|unique:form_groups|max:255|min:4'
         ]);
         $group->name = $request->name;
         $group->save();
         Toast::title('Group updated')->success($group->name)->autoDismiss(5);
-        return redirect()->route('groups.index');
+        return back();
     }
 
     /**

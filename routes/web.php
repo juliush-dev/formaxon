@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventFormGroupController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\FormFieldController;
 use App\Http\Controllers\FormFieldDataController;
@@ -46,6 +47,7 @@ Route::middleware('splade')->group(function () {
             Route::delete('delete', [ProfileController::class, 'destroy'])->name('destroy');
         });
         Route::resource('events', EventController::class);
+        Route::resource('events.groups', EventFormGroupController::class);
         Route::resource('groups', FormGroupController::class);
         Route::resource('groups.forms', FormGroupFormController::class)->except(['index']);
         Route::resource('forms', FormController::class);

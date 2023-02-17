@@ -17,7 +17,7 @@ class Event extends Model
 
     public function formGroups()
     {
-        return $this->hasMany(FormGroup::class);
+        return $this->belongsToMany(FormGroup::class)->using(EventFormGroup::class);
     }
 
     public function participants()

@@ -91,7 +91,7 @@ class FormController extends Controller
         $form->title = $request->title;
         $form->save();
         Toast::title('Form updated')->success($form->title)->autoDismiss(5);
-        return redirect()->route('forms.index');
+        return back();
     }
 
     /**

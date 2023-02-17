@@ -42,23 +42,11 @@ class FormGroupFormController extends Controller
     public function store(Request $request, FormGroup $group)
     {
         Gate::allows('if_admin');
-        $errorBagName = "group_{$group->id}_forms";
-        $request->validateWithBag(
-            $errorBagName,
-            [
-                "forms" => 'required|array',
-            ]
-        );
         foreach ($request->forms as $form_id) {
             $group->forms()->attach($form_id);
         }
-        Toast::title("Form(s) addred")->success()->autoDismiss(2);
+        Toast::title("Form(s) added")->success()->autoDismiss(2);
         return redirect()->back();
-    }
-
-    public static function getRequestErrorsBagName($group)
-    {
-        return "group_{$group->id}_forms";
     }
 
     /**

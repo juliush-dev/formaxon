@@ -10,6 +10,7 @@ use App\Tables\Events;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
+use ProtoneMedia\Splade\Facades\Toast;
 
 class EventController extends Controller
 {
@@ -74,8 +75,7 @@ class EventController extends Controller
     {
         Gate::authorize('if_admin');
         return view('event.edit', [
-            'event' => $event,
-            'formGroups' => FormGroup::all()
+            'event' => $event
         ]);
     }
 
@@ -91,10 +91,19 @@ class EventController extends Controller
         Gate::authorize('if_admin');
         $request->validate([
             'name' => 'required|unique:events,name|max:255',
-            'description' => 'unique:events,description',
+            'description' => 'nullable',
             'target' => Rule::in([Event::TARGET_VISITOR, Event::TARGET_COMPANY]),
             'field_visible_by_target' => ['boolean'],
         ]);
+        $event->name = $request->input('name');
+        $event->location = $request->input('location');
+        $event->description = $request->input('description');
+        $event->target = $request->input('target');
+        $event->thumbnail = $request->input('thumbnail', null);
+        $event->at = $request->input('at');
+        $event->save();
+        Toast::title('Event updated')->autoDismiss(2);
+        return back();
     }
 
     /**
