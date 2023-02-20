@@ -46,7 +46,7 @@ class FormGroupController extends Controller
             'name' => $request->name,
         ]);
         Toast::title('Group created')->autoDismiss(2);
-        return redirect()->back();
+        return back();
     }
 
     /**

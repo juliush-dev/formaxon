@@ -48,9 +48,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(Role::class);
     }
-
-    public function participant()
+    public function events()
     {
-        return $this->hasOne(Participant::class);
+        return $this->belongsToMany(Event::class, 'event_participant', 'user_id', 'event_id')->using(EventParticipant::class);
     }
 }

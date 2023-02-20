@@ -9,8 +9,7 @@ class Event extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 'location', 'at', 'user_id',
-        'description', 'thumbnail', 'field_visible_by_target', 'target'
+        'name', 'description', 'at', 'location', 'target',  'visible_by_target', 'thumbnail'
     ];
     const TARGET_VISITOR = 'visitor';
     const TARGET_COMPANY = 'company';
@@ -22,6 +21,6 @@ class Event extends Model
 
     public function participants()
     {
-        return $this->hasMany(Participant::class);
+        return $this->belongsToMany(User::class, 'event_participant', 'event_id', 'user_id')->using(EventParticipant::class);
     }
 }

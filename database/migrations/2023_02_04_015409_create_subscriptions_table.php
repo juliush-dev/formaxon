@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('participant_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('subscriber_id')->constrained('event_participant')->cascadeOnDelete();
             $table->foreignId('form_group_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

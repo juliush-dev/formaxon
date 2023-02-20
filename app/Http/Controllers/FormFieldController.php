@@ -11,7 +11,6 @@ use ProtoneMedia\Splade\Facades\Toast;
 class FormFieldController extends Controller
 {
 
-    protected $form;
     public function __construct()
     {
         $this->middleware("validate-form-field-store-request")->only([

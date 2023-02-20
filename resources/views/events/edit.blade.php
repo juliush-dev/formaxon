@@ -1,5 +1,8 @@
 <x-app-layout>
     <x-splade-modal>
+        {{-- @php
+            dd($event);
+        @endphp --}}
         <x-splade-form :default="$event" :action="route('events.update', $event)" method="PUT">
             <x-splade-input name="name" :label="__('Event Name')" class="mb-4" />
             <x-splade-textarea name="description" :label="__('Description')" class="mb-4" autosize />
@@ -9,7 +12,8 @@
                 <x-splade-radio name="target" :value="App\Models\Event::TARGET_COMPANY" :label="__('Companies')" />
                 <x-splade-radio name="target" :value="App\Models\Event::TARGET_VISITOR" :label="__('Visitors')" />
             </x-splade-group>
-            <x-splade-submit class="mt-4 p-2">
+            <x-splade-checkbox name="visible_by_target" label="Published" />
+            <x-splade-submit class="mt-4 p-2 w-full bg-blue-500 text-white rounded">
                 Save
             </x-splade-submit>
         </x-splade-form>

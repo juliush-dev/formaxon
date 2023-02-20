@@ -8,10 +8,15 @@ use App\Http\Controllers\FormFieldDataController;
 use App\Http\Controllers\FormGroupController;
 use App\Http\Controllers\FormGroupFormController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Event;
+use App\Models\EventParticipant;
 use App\Models\FormField;
+use App\Models\FormGroup;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
+use ProtoneMedia\Splade\Facades\Toast;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +42,7 @@ Route::middleware('splade')->group(function () {
     Route::get('/', function (Request $request) {
         return view('welcome');
     })->name('welcome');
+    Route::resource('events', EventController::class);
     Route::middleware('auth')->group(function () {
         Route::get('/dashboard', function () {
             return view('dashboard');
@@ -46,13 +52,24 @@ Route::middleware('splade')->group(function () {
             Route::patch('update', [ProfileController::class, 'update'])->name('update');
             Route::delete('delete', [ProfileController::class, 'destroy'])->name('destroy');
         });
-        Route::resource('events', EventController::class);
         Route::resource('events.groups', EventFormGroupController::class);
         Route::resource('groups', FormGroupController::class);
         Route::resource('groups.forms', FormGroupFormController::class)->except(['index']);
         Route::resource('forms', FormController::class);
         Route::resource('forms.fields', FormFieldController::class);
         Route::resource('forms.fields.data', FormFieldDataController::class);
+        Route::post('/subscribe/events/{event}/group/{group}', function (Request $request, Event $event, FormGroup $group) {
+            Gate::allows('if_company');
+            $event->participants()->attach($request->user()->id);
+            Subscription::insert([
+                'subscriber_id' => EventParticipant::where('user_id', $request->user()->id)
+                    ->where('event_id', $event->id)
+                    ->first()->id,
+                'form_group_id' => $group->id
+            ]);
+            Toast::title('Subscribed')->autoDismiss(2);
+            return back();
+        })->name('subscribe');
         Route::get('/fields/{field}/data', function (FormField $field) {
             Gate::allows('if_admin');
             return response()->json(

@@ -14,6 +14,14 @@ use ProtoneMedia\Splade\Facades\Toast;
 
 class EventController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware("auth")->only([
+            'store',
+            'update',
+            'edit'
+        ]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +29,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        return view('event.index', [
+        return view('events.index', [
             'events' => Events::class,
         ]);
     }
@@ -34,7 +42,7 @@ class EventController extends Controller
     public function create()
     {
         Gate::authorize('if_admin');
-        return view('event.create');
+        return view('events.create');
     }
 
     /**
@@ -46,6 +54,19 @@ class EventController extends Controller
     public function store(Request $request)
     {
         Gate::authorize('if_admin');
+        $request->validate([
+            'name' => 'required|unique:events,name|max:255',
+            'description' => 'required',
+            'at' => 'required',
+            'location' => 'required',
+            'target' => Rule::in([Event::TARGET_VISITOR, Event::TARGET_COMPANY]),
+            'location' => 'required',
+            'visible_by_target' => 'required|boolean',
+            'thumbnail' => 'nullable|file',
+        ]);
+        Event::create($request->all());
+        Toast::title('Event created')->autoDismiss(2);
+        return back();
     }
 
     /**
@@ -56,13 +77,7 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        if (Gate::allows('if_company')) {
-            return view('event.show-for-company', ['event' => $event]);
-        } elseif (Gate::allows('if_visitor')) {
-            return view('event.show-for-visitor', ['event' => $event]);
-        } else {
-            return view('event.show', ['event' => $event]);
-        }
+        return view('events.show', ['event' => $event]);
     }
 
     /**
@@ -74,7 +89,7 @@ class EventController extends Controller
     public function edit(Event $event)
     {
         Gate::authorize('if_admin');
-        return view('event.edit', [
+        return view('events.edit', [
             'event' => $event
         ]);
     }
@@ -90,17 +105,21 @@ class EventController extends Controller
     {
         Gate::authorize('if_admin');
         $request->validate([
-            'name' => 'required|unique:events,name|max:255',
-            'description' => 'nullable',
+            'description' => 'required',
+            'at' => 'required',
+            'location' => 'required',
             'target' => Rule::in([Event::TARGET_VISITOR, Event::TARGET_COMPANY]),
-            'field_visible_by_target' => ['boolean'],
+            'location' => 'required',
+            'visible_by_target' => 'required|boolean',
+            'thumbnail' => 'nullable|file',
         ]);
         $event->name = $request->input('name');
-        $event->location = $request->input('location');
         $event->description = $request->input('description');
-        $event->target = $request->input('target');
-        $event->thumbnail = $request->input('thumbnail', null);
         $event->at = $request->input('at');
+        $event->location = $request->input('location');
+        $event->target = $request->input('target');
+        $event->visible_by_target = $request->input('visible_by_target');
+        $event->thumbnail = $request->input('thumbnail', null);
         $event->save();
         Toast::title('Event updated')->autoDismiss(2);
         return back();
@@ -115,5 +134,8 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         Gate::authorize('if_admin');
+        $event->delete();
+        Toast::title('Event deleted')->autoDismiss(2);
+        return back();
     }
 }

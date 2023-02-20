@@ -19,8 +19,8 @@ class Subscription extends Model
         return $this->hasOne(FormGroup::class);
     }
 
-    public function participant()
+    public function subscriber()
     {
-        return $this->belongsTo(Participant::class);
+        return $this->belongsTo(EventParticipant::class);
     }
 }
