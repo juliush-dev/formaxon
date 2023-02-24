@@ -18,6 +18,7 @@ class SubscriptionController extends Controller
      */
     public function index()
     {
+        Gate::allows(['if_admin', 'if_company']);
         return view('subscriptions.index');
     }
     /**
