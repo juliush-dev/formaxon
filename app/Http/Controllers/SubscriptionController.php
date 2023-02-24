@@ -30,7 +30,6 @@ class SubscriptionController extends Controller
     public function store(Request $request)
     {
         Gate::allows('if_company');
-        dd($request->subscription_option);
         $request->user()->subscriptions()->attach($request->subscription_option);
         Toast::title('Subscribed')->autoDismiss(2);
         return back();
