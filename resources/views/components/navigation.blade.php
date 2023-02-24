@@ -18,7 +18,7 @@
                 <span>Dashboard</span>
             </x-nav-link>
         @endcanany
-        <x-nav-link href="{{ route('events.index') }}" :active="Route::is('events.index')" poll="1000">
+        <x-nav-link href="{{ route('events.index') }}" :active="Route::is('events.index')">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -27,7 +27,7 @@
             <span>Events</span>
         </x-nav-link>
         @can('if_company')
-            <x-nav-link href="{{ route('events.index') }}" :active="Route::is('events.index')" poll="1000">
+            <x-nav-link href="{{ route('subscriptions.index') }}" :active="Route::is('subscriptions.index')">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
