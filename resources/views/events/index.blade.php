@@ -217,7 +217,7 @@
                                                 </Link>
                                                 <Link method='DELETE' confirm
                                                     href="{{ route('events.groups.destroy', ['event' => $event, 'group' => $group]) }}"
-                                                    class="text-red-500">
+                                                    class="text-red-500" preserve-scroll>
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                     class="w-6 h-6">
@@ -247,7 +247,7 @@
                         @endphp
                         @if ($groupsNotYetInEvent->count() > 0)
                             <x-splade-form action="{{ route('events.groups.store', $event) }}" method="POST"
-                                submit-on-change="groups" class="px-5">
+                                submit-on-change="groups" class="px-5" preserve-scroll>
                                 <x-splade-checkboxes name="groups" label="Packages not yet in this event"
                                     :options="$groupsNotYetInEvent->mapWithKeys(
                                         fn($item, $key) => [$item['id'] => $item['name']],

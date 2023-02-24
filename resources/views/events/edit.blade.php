@@ -3,7 +3,7 @@
         {{-- @php
             dd($event);
         @endphp --}}
-        <x-splade-form :default="$event" :action="route('events.update', $event)" method="PUT">
+        <x-splade-form :default="$event" :action="route('events.update', $event)" method="PUT" preserve-scroll>
             <x-splade-input name="name" :label="__('Event Name')" class="mb-4" />
             <x-splade-textarea name="description" :label="__('Description')" class="mb-4" autosize />
             <x-splade-input name="location" :label="__('Location')" class="mb-4" />
