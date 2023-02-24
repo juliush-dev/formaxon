@@ -43,7 +43,7 @@
             @endphp
         @endcan
         @foreach ($events as $event)
-            <div class="flex flex-col pb-4 shadow-md bg-white rounded-md">
+            <div class="flex flex-col pb-4 shadow-md bg-white rounded-md border border-slate-800">
                 <header class="relative flex space-x-5 justify-between rounded-md shadow-sm bg-white p-5">
                     <h4 class="text-md font-semibold">{{ ucfirst(__($event->name)) }}</h4>
                     @can('if_admin')
