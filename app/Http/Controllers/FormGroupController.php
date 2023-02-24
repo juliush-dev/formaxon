@@ -9,6 +9,16 @@ use ProtoneMedia\Splade\Facades\Toast;
 
 class FormGroupController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware("auth")->only([
+            'store',
+            'update',
+            'edit'
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -57,7 +67,7 @@ class FormGroupController extends Controller
      */
     public function show(FormGroup $group)
     {
-        //
+        return view('components.groups.show', $group);
     }
 
     /**

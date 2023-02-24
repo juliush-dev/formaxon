@@ -27,18 +27,15 @@
             @endphp
         @elsecan('if_company')
             @php
-                $events = \App\Models\Event::select('events.*')
-                    ->join('event_form_group', 'events.id', '=', 'event_form_group.event_id')
-                    ->distinct()
-                    ->whereNotIn(
-                        'events.id',
-                        \App\Models\EventFormGroup::join('subscriber', 'subscriber.subscription', '=', 'event_form_group.id')
-                            ->select('event_form_group.event_id')
-                            ->where('subscriber.user_id', auth()->user()->id),
-                    )
-                    ->whereDate('at', '>=', now())
+                $events = \App\Models\Event::whereNotIn(
+                    'id',
+                    \App\Models\EventFormGroup::join('subscriber', 'subscriber.subscription', '=', 'event_form_group.id')
+                        ->select('event_form_group.event_id')
+                        ->where('subscriber.user_id', auth()->user()->id),
+                )
                     ->where('target', \App\Models\Event::TARGET_COMPANY)
                     ->where('visible_by_target', true)
+                    ->whereDate('at', '>=', now())
                     ->get();
             @endphp
         @endcan
@@ -175,13 +172,12 @@
                                                 <span>Preview</span>
                                                 </Link>
                                                 @can('if_company')
-                                                    @php
-                                                        $subscription_option = \App\Models\EventFormGroup::where('event_id', $event->id)
-                                                            ->where('form_group_id', $group->id)
-                                                            ->first()->id;
-                                                    @endphp
-                                                    <Link href="{{ route('subscriptions.store') }}" method="POST"
-                                                        data="{subscription_option: {{ $subscription_option }}}"
+                                                    <Link
+                                                        href="{{ route(
+                                                            'subscribe',
+                                                            \App\Models\EventFormGroup::where('event_id', $event->id)->where('form_group_id', $group->id)->first(),
+                                                        ) }}"
+                                                        method="POST"
                                                         class="text-white text-sm px-2 py-1 bg-blue-500 rounded  shadow-md flex space-x-2 items-center">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"

@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Subscription;
+use App\Models\FormGroup;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use ProtoneMedia\Splade\Facades\Toast;
 
 class SubscriptionController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      *
@@ -14,19 +18,8 @@ class SubscriptionController extends Controller
      */
     public function index()
     {
-        //
+        return view('subscriptions.index');
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -35,51 +28,23 @@ class SubscriptionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Gate::allows('if_company');
+        dd($request->subscription_option);
+        $request->user()->subscriptions()->attach($request->subscription_option);
+        Toast::title('Subscribed')->autoDismiss(2);
+        return back();
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Subscription  $subscription
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Subscription $subscription)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Subscription  $subscription
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Subscription $subscription)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Subscription  $subscription
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Subscription $subscription)
-    {
-        //
-    }
-
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Subscription  $subscription
+     * @param  \App\Models\FormGroup  $group
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Subscription $subscription)
+    public function destroy(FormGroup $group)
     {
-        //
+        Gate::authorize('if_admin');
+        $group->delete();
+        Toast::title($group->name . ' deleted')->success()->autoDismiss(2);
+        return redirect()->route('groups.index');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Enums\FormFieldType;
+use App\Models\EventFormGroup;
 use App\Models\FormField;
 use App\Models\FormFieldData;
 use App\Models\FormGroup;
@@ -43,6 +44,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('field', FormField::class);
         Route::model('group', FormGroup::class);
         Route::model('data', FormFieldData::class);
+        Route::model('event_package', EventFormGroup::class);
     }
 
     /**

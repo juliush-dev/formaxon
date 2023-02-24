@@ -1,9 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
         <span class="flex space-x-3 justify-between">
-            <h1 class="text-2xl">Groups</h1>
-            <Link modal href="{{ route('groups.create') }}" class="border rounded-md px-4 py-2">
-            {{ __('New Group') }}
+            <Link modal href="{{ route('groups.create') }}" class="border rounded px-4 py-1 shadow-sm">
+            {{ __('New package') }}
             </Link>
         </span>
     </x-slot>

@@ -8,8 +8,10 @@ use App\Http\Controllers\FormFieldDataController;
 use App\Http\Controllers\FormGroupController;
 use App\Http\Controllers\FormGroupFormController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SubscriptionController;
 use App\Models\Event;
-use App\Models\EventParticipant;
+use App\Models\EventFormGroup;
+use App\Models\Subscriber;
 use App\Models\FormField;
 use App\Models\FormGroup;
 use App\Models\Subscription;
@@ -43,6 +45,7 @@ Route::middleware('splade')->group(function () {
         return view('welcome');
     })->name('welcome');
     Route::resource('events', EventController::class);
+    Route::resource('groups', FormGroupController::class);
     Route::middleware('auth')->group(function () {
         Route::get('/dashboard', function () {
             return view('dashboard');
@@ -53,23 +56,12 @@ Route::middleware('splade')->group(function () {
             Route::delete('delete', [ProfileController::class, 'destroy'])->name('destroy');
         });
         Route::resource('events.groups', EventFormGroupController::class);
-        Route::resource('groups', FormGroupController::class);
         Route::resource('groups.forms', FormGroupFormController::class)->except(['index']);
         Route::resource('forms', FormController::class);
         Route::resource('forms.fields', FormFieldController::class);
         Route::resource('forms.fields.data', FormFieldDataController::class);
-        Route::post('/subscribe/events/{event}/group/{group}', function (Request $request, Event $event, FormGroup $group) {
-            Gate::allows('if_company');
-            $event->participants()->attach($request->user()->id);
-            Subscription::insert([
-                'subscriber_id' => EventParticipant::where('user_id', $request->user()->id)
-                    ->where('event_id', $event->id)
-                    ->first()->id,
-                'form_group_id' => $group->id
-            ]);
-            Toast::title('Subscribed')->autoDismiss(2);
-            return back();
-        })->name('subscribe');
+        Route::resource('subscriptions', SubscriptionController::class)->only(['destroy', 'store', 'index']);
+        Route::resource('subscriptions.forms', FormGroupFormController::class)->except(['create']);
         Route::get('/fields/{field}/data', function (FormField $field) {
             Gate::allows('if_admin');
             return response()->json(

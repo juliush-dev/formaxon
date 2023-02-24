@@ -1,8 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <span class="flex space-x-3 justify-between">
-            <h1 class="text-2xl">{{ __('Forms') }}</h1>
-            <Link modal href="{{ route('forms.create') }}" class="border rounded-md px-4 py-2">
+            <Link modal href="{{ route('forms.create') }}" class="border rounded px-4 py-1 shadow-sm">
             {{ __('New form') }}
             </Link>
         </span>

@@ -1,4 +1,7 @@
-@props(['form'])
+@props(['group'])
+@php
+    $forms = $group->forms;
+@endphp
 <div>
     <x-splade-cell name as="$form">
         <span class="flex space-x-2">
