@@ -12,7 +12,7 @@
                 <x-splade-radio name="target" :value="App\Models\Event::TARGET_COMPANY" :label="__('Companies')" />
                 <x-splade-radio name="target" :value="App\Models\Event::TARGET_VISITOR" :label="__('Visitors')" />
             </x-splade-group>
-            <x-splade-checkbox name="visible_by_target" label="Published" />
+            <x-splade-checkbox name="visible_by_target" value="1" label="Published" />
             <x-splade-submit class="mt-4 p-2 w-full bg-blue-500 text-white rounded">
                 Save
             </x-splade-submit>
