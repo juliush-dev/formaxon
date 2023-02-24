@@ -14,16 +14,11 @@ class FormGroup extends Model
     ];
     public function events()
     {
-        return $this->belongsToMany(Event::class)->using(EventFormGroup::class);
+        return $this->belongsToMany(Event::class)->using(EventFormGroup::class)->withTimestamps();
     }
 
     public function forms()
     {
-        return $this->belongsToMany(Form::class)->using(FormGroupForm::class);
-    }
-
-    public function Subscriptions()
-    {
-        return $this->belongsToMany(Subscription::class);
+        return $this->belongsToMany(Form::class)->using(FormGroupForm::class)->withTimestamps();
     }
 }

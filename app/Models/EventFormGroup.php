@@ -14,6 +14,6 @@ class EventFormGroup extends Pivot
 
     public function subscribers()
     {
-        return $this->hasMany(Subscriber::class,  'subscriber', 'subscription', 'user_id')->using(Subscriber::class);
+        return $this->belongsToMany(User::class,  'subscriber', 'subscription', 'user_id')->using(Subscriber::class)->withTimestamps();
     }
 }

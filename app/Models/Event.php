@@ -16,6 +16,6 @@ class Event extends Model
 
     public function formGroups()
     {
-        return $this->belongsToMany(FormGroup::class)->using(EventFormGroup::class);
+        return $this->belongsToMany(FormGroup::class)->using(EventFormGroup::class)->withTimestamps();
     }
 }

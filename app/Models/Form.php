@@ -15,7 +15,7 @@ class Form extends Model
 
     public function formGroups()
     {
-        return $this->belongsToMany(FormGroup::class)->using(FormGroupForm::class);
+        return $this->belongsToMany(FormGroup::class)->using(FormGroupForm::class)->withTimestamps();
     }
 
     public function formFields()

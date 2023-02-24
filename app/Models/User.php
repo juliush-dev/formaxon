@@ -50,6 +50,6 @@ class User extends Authenticatable
     }
     public function subscriptions()
     {
-        return $this->belongsToMany(EventFormGroup::class, 'subscriber', 'user_id', 'subscription')->using(Subscriber::class);
+        return $this->belongsToMany(EventFormGroup::class, 'subscriber', 'user_id', 'subscription')->using(Subscriber::class)->withTimestamps();
     }
 }
