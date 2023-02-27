@@ -59,8 +59,7 @@ class FormController extends Controller
      */
     public function show(Form $form)
     {
-        Gate::authorize('if_admin');
-        return view('forms.show');
+        return view('forms.show', ['form' => $form]);
     }
 
     /**
