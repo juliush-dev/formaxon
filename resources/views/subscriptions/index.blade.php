@@ -105,29 +105,39 @@
                             </tbody>
                         </table>
                     </main>
-                    <footer class="flex flex-col space-y-4 px-5 pb-5">
+                    <footer class="flex flex-col space-y-4 pb-5">
                         @foreach ($forms as $form)
                             <div class="flex flex-col space-y-3">
-                                <div class="bg-gradient-to-r from-yellow-500/80 flex justify-between p-4">
+                                <div
+                                    class="bg-gradient-to-r from-violet-500/80 flex text-white justify-between p-2  items-center">
                                     <span>{{ $form->title }}</span>
-                                    <x-link-button modal method='GET' href="{{ route('forms.show', $form) }}"
-                                        preserve-scroll class="flex space-x-2 justify-center">
+                                    <x-link-button modal method='GET' href="{{ route('fields.data.create', $form) }}"
+                                        preserve-scroll class="flex space-x-2 items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                                         </svg>
-                                        <span class="text-sm">Neues Exemplar ausfüllen</span>
+                                        <span class="text-sm">Fill new examplar</span>
                                     </x-link-button>
                                 </div>
-                                <div class="flex justify-between space-x-4 pl-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                                    </svg>
-
-                                </div>
+                                @php
+                                    // dd($subscription->subscribers);
+                                    $formFieldsData = \App\Models\FormFieldData::where('subscriber_id', auth()->user()->id)
+                                        ->whereIn('form_field_id', $form->formFields->map(fn($field) => $field->id)->toArray())
+                                        ->get();
+                                @endphp
+                                @if ($formFieldsData->count() > 0)
+                                    <div class="flex justify-between space-x-4 pl-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                        </svg>
+                                    </div>
+                                @else
+                                    <x-hint text="No examplar found. Create some." />
+                                @endif
                             </div>
                         @endforeach
                     </footer>

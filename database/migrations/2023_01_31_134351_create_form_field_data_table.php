@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('form_field_data', function (Blueprint $table) {
             $table->id();
             $table->foreignId('form_field_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('participant_id')->nullable();
-            $table->integer('visitor_id')->nullable();
+            $table->foreignId('subscriber_id')->nullable()->constrained('subscriber')->cascadeOnDelete();
+            $table->ipAddress('visitor_ip');
             $table->text('value');
             $table->timestamps();
         });

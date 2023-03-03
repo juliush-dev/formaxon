@@ -3,6 +3,7 @@
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventFormGroupController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\FormDataController;
 use App\Http\Controllers\FormFieldController;
 use App\Http\Controllers\FormFieldDataController;
 use App\Http\Controllers\FormGroupController;
@@ -59,7 +60,11 @@ Route::middleware('splade')->group(function () {
         Route::resource('groups.forms', FormGroupFormController::class)->except(['index']);
         Route::resource('forms', FormController::class);
         Route::resource('forms.fields', FormFieldController::class);
-        Route::resource('forms.fields.data', FormFieldDataController::class);
+        Route::get('/forms/{form}/fields/data/create', [FormDataController::class, "create"])->name('fields.data.create');
+        Route::post('/forms/{form}/fields/data', [FormDataController::class, "store"])->name("fields.data.store");
+        Route::get('/forms/{form}/fields/data/edit', [FormDataController::class, "edit"])->name("fields.data.edit");
+        Route::put('/forms/{form}/fields/data', [FormDataController::class, "update"])->name("fields.data.update");
+        Route::delete('/forms/{form}/fields/data', [FormDataController::class, "destroy"])->name("fields.data.destroy");
         Route::resource('subscriptions', SubscriptionController::class)->only(['destroy', 'store', 'index']);
         Route::resource('subscriptions.forms', FormGroupFormController::class)->except(['create']);
         Route::get('/fields/{field}/data', function (FormField $field) {

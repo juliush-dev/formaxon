@@ -5,8 +5,7 @@
 <x-app-layout>
     <x-splade-modal>
         <h2 class="text-xl mb-4">Ausfüllung eines neuen Exemplar von {{ $form->title }}</h2>
-        {{-- <x-splade-form :action="route('forms.update', $form)" method='PUT' class="space-y-4 mt-4" preserve-scroll> --}}
-        <x-splade-form method='PUT' class="space-y-4 mt-4" preserve-scroll>
+        <x-splade-form :action="route('fields.data.store', $form)" method='POST' class="space-y-4 mt-4" preserve-scroll>
             @foreach ($fields as $field)
                 @if ($field->type == \App\Enums\FormFieldType::TEXT->value)
                     <x-splade-input name="field_{{ $field->id }}" type="text" :value="$field->default_value" :label="$field->label" />

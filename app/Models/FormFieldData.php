@@ -10,8 +10,8 @@ class FormFieldData extends Model
     use HasFactory;
     protected $fillable = [
         'form_field_id',
-        'participant_id',
-        'visitor_id',
+        'subscriber_id',
+        'visitor_ip',
         'value',
     ];
     public function formField()
